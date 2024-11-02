@@ -14,8 +14,8 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 @Service
-public class LoanCalculatorServiceImpl implements LoanCalculatorService
-{
+public class LoanCalculatorServiceImpl implements LoanCalculatorService {
+
     private final LoanCalculationRepository loanCalculationRepository;
     private final MonthlyPaymentRepository monthlyPaymentRepository;
 
@@ -28,6 +28,18 @@ public class LoanCalculatorServiceImpl implements LoanCalculatorService
     @Transactional
     @Override
     public Map<String, String> calculateAndSaveLoan(LoanCalculationRequest request) {
+        // Check if a loan with the same parameters already exists
+        LoanCalculation existingLoan = loanCalculationRepository.findWithPayments(request.getAmount(), request.getAnnualInterestRate(), request.getNumberOfMonths());
+
+        if (existingLoan != null) {
+            // Return existing monthly payments
+            Map<String, String> monthlyPayments = new LinkedHashMap<>();
+            existingLoan.getMonthlyPayments().forEach(payment ->
+                monthlyPayments.put("month " + payment.getMonthNumber(), String.format("%.2f", payment.getPaymentAmount()))
+            );
+            return monthlyPayments;
+        }
+
         // Calculate monthly payment
         double monthlyInterestRate = request.getAnnualInterestRate() / 100 / 12;
         double monthlyPayment = (request.getAmount() * monthlyInterestRate * Math.pow(1 + monthlyInterestRate, request.getNumberOfMonths())) /
