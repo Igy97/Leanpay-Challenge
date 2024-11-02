@@ -24,13 +24,8 @@ public class LoanCalculatorController
 
     @PostMapping("/calculate")
     public ResponseEntity<Map<String, String>> calculateLoan(@RequestBody LoanCalculationRequest request) {
-        Map<String, String> monthlyPayments = loanCalculatorService.calculateLoan(
-            request.getAmount(),
-            request.getAnnualInterestRate(),
-            request.getNumberOfMonths()
-        );
-
-        return ResponseEntity.ok(monthlyPayments);
+        Map<String, String> response = loanCalculatorService.calculateAndSaveLoan(request);
+        return ResponseEntity.ok(response);
     }
 
 }
