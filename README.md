@@ -1,17 +1,14 @@
 # Loan Calculator Application
 
 ## Overview
-This is a Loan Calculator application that calculates monthly payments based on user-provided loan details. It provides an API for easy interaction.
+This project implements a loan calculation service designed to calculate monthly loan payments and save them to a database. The service provides an optimized way of handling loan calculations by first checking for pre-existing records to avoid redundant calculations. Key functionalities include checking, calculating, and storing loan payment data with persistent storage to enhance efficiency and consistency in repeated calculations. It provides an API for easy interaction.
 
 ## Table of Contents
 - [Features](#features)
 - [Technologies](#technologies)
 - [Installation](#installation)
 - [Usage](#usage)
-- [Running Tests](#running-tests)
-- [API Documentation](#api-documentation)
-- [Contributing](#contributing)
-- [License](#license)
+- [Testing](#testing)
 
 ## Features
 - Calculate monthly payments for loans
@@ -38,12 +35,14 @@ cd loan-calculator
 ```
 mvn clean package
 ```
-4. Run the application:
+4. Run the MariaDB server:
+```
+docker compose up
+```
+5. Run the application:
 ```
 mvn spring-boot:run
 ```
-## Usage
-- To calculate a loan, make a POST request to the following endpoint:
 
 ## Database Configuration
 
@@ -54,8 +53,11 @@ spring.datasource.username=your_username
 spring.datasource.password=your_password
 ```
 
+## Usage
+- To calculate a loan, make a POST request to the following endpoint:
+
 ## Endpoint
--POST /api/v1/loanCalculator/calculate
+- POST /api/v1/loanCalculator/calculate
 
 ## Request Body
 ```
@@ -92,7 +94,7 @@ mvn test
 ```
 ## Integration Tests
 
--- For integration tests, ensure that your application is running and execute:
+- For integration tests, ensure that your application is running and execute:
 ```
 mvn integration-test
 ```
